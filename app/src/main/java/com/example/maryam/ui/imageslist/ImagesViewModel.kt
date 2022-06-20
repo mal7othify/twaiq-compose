@@ -3,9 +3,14 @@ package com.example.maryam.ui.imageslist
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.maryam.R
-import com.example.maryam.domain.ImageData
+import com.example.maryam.data.domain.ImageData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ImagesViewModel : ViewModel() {
+@HiltViewModel
+class ImagesViewModel @Inject constructor(
+  // Add classes
+)  : ViewModel() {
 
   init {
     Log.e("ImagesViewModel", "This is inside init section")

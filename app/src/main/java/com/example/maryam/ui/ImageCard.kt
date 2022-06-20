@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.dp
-import com.example.maryam.domain.ImageData
+import com.example.maryam.data.domain.ImageData
 
 @Composable
 fun ImageCard(image: ImageData) {
