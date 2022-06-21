@@ -1,5 +1,6 @@
 package com.example.maryam.ui.imageslist
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import com.example.maryam.ImageCard
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagesScreen(viewModel: ImagesViewModel = hiltViewModel()) {
+  val state = viewModel.state.value
   Surface(
     modifier = Modifier.fillMaxSize(),
     color = MaterialTheme.colors.secondary
@@ -32,7 +34,8 @@ fun ImagesScreen(viewModel: ImagesViewModel = hiltViewModel()) {
       ) {
         Text(text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ")
       }
-      items(viewModel.getImages()) { picture ->
+      items(state.images) { picture ->
+        Log.e("ImagesScreen", "${state.images}")
         ImageCard(image = picture)
       }
     }

@@ -6,6 +6,7 @@ import com.example.maryam.data.domain.PicsumApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 class ImageRepository @Inject constructor(
@@ -22,7 +23,13 @@ class ImageRepository @Inject constructor(
       val images = getImages()
       emit(Response.Success<List<ImageData>>(images))
     } catch (e: HttpException) {
-      emit(Response.Error<List<ImageData>>("There is something wrong :("))
+      emit(
+        Response.Error<List<ImageData>>(
+          e.localizedMessage ?: "There is something wrong \uD83D\uDE22"
+        )
+      )
+    } catch (e: IOException) {
+      emit(Response.Error<List<ImageData>>("Failed to connect to server \uD83D\uDE22"))
     }
   }
 }

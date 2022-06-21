@@ -1,64 +1,49 @@
 package com.example.maryam.ui.imageslist
 
-import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.maryam.R
-import com.example.maryam.data.domain.ImageData
+import androidx.lifecycle.viewModelScope
+import com.example.maryam.common.Response
+import com.example.maryam.data.repository.ImageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class ImagesViewModel @Inject constructor(
-  // Add classes
-)  : ViewModel() {
+  private val repository: ImageRepository
+) : ViewModel() {
+  private val _state = mutableStateOf(ImageListState())
+  val state: State<ImageListState> = _state
 
   init {
-    Log.e("ImagesViewModel", "This is inside init section")
+    getImages()
   }
 
-  fun getImages(): List<ImageData> {
-    val images = mutableListOf<ImageData>(
-      ImageData(
-        photoPath = R.drawable.item_1,
-        title = "قمر",
-        id = 1
-      ),
-      ImageData(
-        photoPath = R.drawable.item_2,
-        title = "أشكال",
-        id = 2
-      ),
-      ImageData(
-        photoPath = R.drawable.item_3,
-        title = "جبال",
-        id = 3
-      ),
-      ImageData(
-        photoPath = R.drawable.item_4,
-        title = "جبال أخرى",
-        id = 4
-      ),
-      ImageData(
-        photoPath = R.drawable.item_2,
-        title = "شتاء",
-        id = 5
-      ),
-      ImageData(
-        photoPath = R.drawable.item_6,
-        title = "منزل",
-        id = 6
-      ),
-      ImageData(
-        photoPath = R.drawable.item_7,
-        title = "رمادي",
-        id = 7
-      ),
-      ImageData(
-        photoPath = R.drawable.item_3,
-        title = "صحراء",
-        id = 8
-      ),
-    )
-    return images
+  fun getImages() {
+    repository.getAllImages().onEach { response ->
+      when (response) {
+        is Response.Loading -> {
+          _state.value = ImageListState(isLoading = true)
+        }
+        is Response.Success -> {
+          _state.value = ImageListState(images = response.data ?: emptyList())
+        }
+        is Response.Error -> {
+          _state.value =
+            ImageListState(error = response.message ?: "There is something wrong \uD83D\uDE22")
+        }
+      }
+    }.launchIn(viewModelScope)
   }
 }
+
+
+
+
+
+
+
+
